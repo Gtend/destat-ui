@@ -44,7 +44,7 @@ export default function Navigation() {
                 asChild
                 className={navigationMenuTriggerStyle()}
               >
-                <Link to="/docs">Dashboard</Link>
+                <Link to="/">Dashboard</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>

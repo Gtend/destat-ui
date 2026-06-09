@@ -198,7 +198,7 @@ export default function CreateSurvey() {
             onSubmit={CreateSurvey}
             encType="multipart/form-data"
           >
-            <label className="flex fle x-col mb-4">
+            <label className="flex flex-col mb-4">
               <h1 className="font-bold">Title</h1>
               <Input type="text" name="title" />
             </label>
