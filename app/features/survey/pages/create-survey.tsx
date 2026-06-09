@@ -51,25 +51,31 @@ import { desc } from "drizzle-orm";
 //     });
 //     console.log(error);
 //   }
-//   // console.log(metadata);
+//   console.log(metadata);
 //   // console.log(image);
 // };
 export const action = async ({ request }: Route.ActionArgs) => {
   const formData = await request.formData();
-  const metadata = JSON.parse(formData.get("metadata") as string);
-  const imageFile = formData.get("image") as File;
+  const metadataRaw = formData.get("metadata");
+  if (!metadataRaw) return null;
 
+  const metadata = JSON.parse(metadataRaw as string);
+  if (!metadata.id) return null;
+
+  const imageFile = formData.get("image");
   let imageUrl = null;
 
-  if (imageFile && imageFile.size > 0) {
+  if (imageFile && imageFile instanceof Blob && imageFile.size > 0) {
+    const arrayBuffer = await (imageFile as Blob).arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
     const { data, error } = await supabase.storage
       .from("images")
-      .upload(metadata.id, imageFile);
+      .upload(metadata.id, buffer, {
+        contentType: (imageFile as File).type || "image/jpeg",
+      });
     if (!error) {
-      const publicUrl = await supabase.storage
-        .from("images")
-        .getPublicUrl(data.path);
-      imageUrl = publicUrl.data.publicUrl;
+      imageUrl = supabase.storage.from("images").getPublicUrl(data.path)
+        .data.publicUrl;
     }
   }
 
@@ -129,7 +135,7 @@ export default function CreateSurvey() {
     options: string[];
   }
   const CreateSurvey = (e: React.FormEvent<HTMLFormElement>) => {
-    //  e.preventDefault();
+    e.preventDefault();
     // const questions: Question[] = [];
     const formData = new FormData(e.currentTarget);
     const questionsData = formData.getAll("q") as string[];
@@ -224,7 +230,7 @@ export default function CreateSurvey() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form
+          <form
             // method="post"
             onSubmit={CreateSurvey}
             encType="multipart/form-data"
@@ -331,7 +337,7 @@ export default function CreateSurvey() {
             <Button type="submit" className="w-full">
               Create
             </Button>
-          </Form>
+          </form>
         </CardContent>
       </Card>
     </div>
