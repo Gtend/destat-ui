@@ -1,4 +1,4 @@
-import { useAccount, useConnection, useDisconnect } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
 import { rabbykit } from "~/root";
 import { Button } from "./ui/button";
 import { confluxESpace } from "viem/chains";
