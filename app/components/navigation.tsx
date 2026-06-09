@@ -6,10 +6,12 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
   NavigationMenuViewport,
 } from "~/components/ui/navigation-menu";
 import { Button } from "./ui/button";
 import { rabbykit } from "~/root";
+import WalletButton from "./wallet-button";
 
 // - navigation
 // - Dashboard
@@ -38,13 +40,18 @@ export default function Navigation() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink>Dashboard</NavigationMenuLink>
+              <NavigationMenuLink
+                asChild
+                className={navigationMenuTriggerStyle()}
+              >
+                <Link to="/docs">Dashboard</Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuTrigger>Survey</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                  <li className="row-span-2">
+                  <li className="row-span-2 h-[150px]">
                     <NavigationMenuLink asChild>
                       <a
                         className="from-muted/50 to-muted flex h-full w-full flex-col justify-center rounded-md bg-linear-to-b no-underline outline-none focus:shadow-md"
@@ -70,6 +77,18 @@ export default function Navigation() {
                       </Link>
                     </NavigationMenuLink>
                   </li>
+                  {/* <li>
+                    <NavigationMenuLink asChild>
+                      <a href="/survey/all">
+                        <div className="text-sm leading-none font-medium">
+                          All surveys
+                        </div>
+                        <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+                          List all surveys
+                        </p>
+                      </a>
+                    </NavigationMenuLink>
+                  </li> */}
                   <li>
                     <NavigationMenuLink asChild>
                       <Link to="/survey/create">
@@ -89,7 +108,7 @@ export default function Navigation() {
               <NavigationMenuTrigger>Archive</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                  <li className="row-span-2">
+                  <li className="row-span-2 h-[150px]">
                     <NavigationMenuLink asChild>
                       <a
                         className="from-muted/50 to-muted flex h-full w-full flex-col justify-center rounded-md bg-linear-to-b no-underline outline-none focus:shadow-md"
@@ -122,7 +141,7 @@ export default function Navigation() {
               <NavigationMenuTrigger>Profile</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                  <li className="row-span-2">
+                  <li className="row-span-2 h-[150px]">
                     <NavigationMenuLink asChild>
                       <a
                         className="from-muted/50 to-muted flex h-full w-full flex-col justify-center rounded-md bg-linear-to-b no-underline outline-none focus:shadow-md"
@@ -165,13 +184,7 @@ export default function Navigation() {
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
-        <Button
-          onClick={() => {
-            rabbykit.open();
-          }}
-        >
-          Connect
-        </Button>
+        <WalletButton />
       </div>
     </nav>
   );

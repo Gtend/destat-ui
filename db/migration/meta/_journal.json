@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1781008393064,
+      "tag": "0000_lucky_lizard",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1781012512126,
+      "tag": "0001_loving_ozymandias",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781018447327,
+      "tag": "0002_opposite_lake",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1781021627927,
+      "tag": "0003_outgoing_ultimatum",
+      "breakpoints": true
+    }
+  ]
+}

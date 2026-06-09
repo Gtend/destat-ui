@@ -14,6 +14,12 @@ import Navigation from "./components/navigation";
 import { createModal } from "@rabby-wallet/rabbykit";
 import { createConfig, http } from "@wagmi/core";
 import { hardhat } from "@wagmi/core/chains";
+// import { createConfig, http } from "wagmi";
+// import { hardhat } from "wagmi/chains";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { WagmiProvider } from "wagmi";
+import { type WagmiProviderProps } from "wagmi";
 
 export const config = createConfig({
   chains: [hardhat],
@@ -25,6 +31,8 @@ export const config = createConfig({
 export const rabbykit = createModal({
   wagmi: config,
 });
+
+const queryClient = new QueryClient();
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -46,12 +54,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <div className="py-20 px-5">
-      <Navigation />
-      <Outlet />
+    <div className="py-20 px-20 h-screen">
+      {/* <WagmiProvider config={config}> */}
+      {/* @ts-ignore */}
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          <Navigation />
+          <Outlet />
+        </QueryClientProvider>
+      </WagmiProvider>
     </div>
   );
 }
+// export default function App() {
+//   return (
+//     <div className="flex justify-center items-center min-h-screen">
+//       <Navigation />
+//       <main className="pt-20 px-20">
+//         <Outlet />
+//       </main>
+//     </div>
+//   );
+// }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
