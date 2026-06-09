@@ -25,34 +25,65 @@ import { desc } from "drizzle-orm";
 //   const formData = await request.formData();
 //   console.log(formData);
 // };
+// export const action = async ({ request }: Route.ActionArgs) => {
+//   // console.log("backend side action function was called");
+//   // console.log("called");
+//   const formData = await request.formData();
+//   const metadata = JSON.parse(formData.get("metadata") as string);
+//   const imageFile = formData.get("image") as File;
+
+//   const { data, error } = await supabase.storage
+//     .from("images")
+//     .upload(metadata.id, imageFile);
+//   if (!error) {
+//     const publicUrl = await supabase.storage
+//       .from("images")
+//       .getPublicUrl(data.path);
+//     const { data: survey, error } = await supabase.from("survey").insert({
+//       id: metadata.id,
+//       title: metadata.title,
+//       description: metadata.description,
+//       target_number: metadata.target_number,
+//       reward_amount: metadata.reward_amount,
+//       image: publicUrl.data.publicUrl,
+//       questions: metadata.questions,
+//       owner: metadata.owner,
+//     });
+//     console.log(error);
+//   }
+//   // console.log(metadata);
+//   // console.log(image);
+// };
 export const action = async ({ request }: Route.ActionArgs) => {
-  // console.log("backend side action function was called");
-  // console.log("called");
   const formData = await request.formData();
   const metadata = JSON.parse(formData.get("metadata") as string);
   const imageFile = formData.get("image") as File;
 
-  const { data, error } = await supabase.storage
-    .from("images")
-    .upload(metadata.id, imageFile);
-  if (!error) {
-    const publicUrl = await supabase.storage
+  let imageUrl = null;
+
+  if (imageFile && imageFile.size > 0) {
+    const { data, error } = await supabase.storage
       .from("images")
-      .getPublicUrl(data.path);
-    const { data: survey, error } = await supabase.from("survey").insert({
-      id: metadata.id,
-      title: metadata.title,
-      description: metadata.description,
-      target_number: metadata.target_number,
-      reward_amount: metadata.reward_amount,
-      image: publicUrl.data.publicUrl,
-      questions: metadata.questions,
-      owner: metadata.owner,
-    });
-    console.log(error);
+      .upload(metadata.id, imageFile);
+    if (!error) {
+      const publicUrl = await supabase.storage
+        .from("images")
+        .getPublicUrl(data.path);
+      imageUrl = publicUrl.data.publicUrl;
+    }
   }
-  // console.log(metadata);
-  // console.log(image);
+
+  const { error } = await supabase.from("survey").insert({
+    id: metadata.id,
+    title: metadata.title,
+    description: metadata.description,
+    target_number: metadata.target_number,
+    reward_amount: metadata.reward_amount,
+    image: imageUrl,
+    questions: metadata.questions,
+    owner: metadata.owner,
+  });
+  console.log(error);
 };
 
 export default function CreateSurvey() {
